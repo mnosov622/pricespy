@@ -65,6 +65,7 @@ export async function scrapeAmazonProduct(url: string) {
 		const totalDiscount = discountRates?.[0];
 
 		const productData = {
+			url,
 			title,
 			currency: currency || '$',
 			originalPrice: Number(originalPrice) || Number(currentPrice),
