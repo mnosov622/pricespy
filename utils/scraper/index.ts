@@ -38,13 +38,13 @@ export async function scrapeAmazonProduct(url: string) {
 
 		currentPrice = currentPrice.replace(/\.$/, '');
 
-		const originalPriceExists = $('.a-price.a-text-price .a-offscreen').length > 0;
-
-		let originalPrice = originalPriceExists
-			? extractPrice($('.a-price.a-text-price .a-offscreen'))
-			: currentPrice;
-
-		originalPrice = originalPrice.replace(/\.$/, '');
+		const originalPrice = extractPrice(
+			$('#priceblock_ourprice'),
+			$('.a-price.a-text-price span.a-offscreen'),
+			$('#listPrice'),
+			$('#priceblock_dealprice'),
+			$('.a-size-base.a-color-price')
+		);
 
 		const outOfStock = $('#availability').text().toLowerCase() === 'currently unavailable';
 		const images =
