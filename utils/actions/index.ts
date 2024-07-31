@@ -8,6 +8,8 @@ import { connectToDb } from '../mongoose';
 import { generateEmailBody, sendEmail } from '../nodemailer';
 import { scrapeAmazonProduct } from '../scraper';
 
+export const dynamic = 'force-dynamic';
+
 export async function scrapeAndStoreProduct(productUrl: string) {
 	if (!productUrl) {
 		return;
