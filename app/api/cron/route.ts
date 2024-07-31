@@ -6,34 +6,31 @@ import { scrapeAmazonProduct } from '@/utils/scraper';
 import { NextResponse } from 'next/server';
 
 export const maxDuration = 60;
-
 export const dynamic = 'force-dynamic';
-
 export const revalidate = 0;
 
-export async function GET() {
+export async function GET(request: Request) {
 	try {
 		connectToDb();
 
 		const products = await Product.find({});
 
-		if (!products) {
-			throw new Error('No products found');
-		}
+		if (!products) throw new Error('No product fetched');
 
 		const updatedProducts = await Promise.all(
-			products.map(async (product) => {
-				const scrapedProduct = await scrapeAmazonProduct(product.url);
-				if (!scrapedProduct) {
-					throw new Error('Error scraping product');
-				}
+			products.map(async (currentProduct) => {
+				const scrapedProduct = await scrapeAmazonProduct(currentProduct.url);
 
-				const updatedPriceHistory: any = [
-					...product?.priceHistory,
-					{ price: scrapedProduct.currentPrice },
+				if (!scrapedProduct) return;
+
+				const updatedPriceHistory = [
+					...currentProduct.priceHistory,
+					{
+						price: scrapedProduct.currentPrice,
+					},
 				];
 
-				product = {
+				const product = {
 					...scrapedProduct,
 					priceHistory: updatedPriceHistory,
 					lowestPrice: getLowestPrice(updatedPriceHistory),
@@ -48,30 +45,29 @@ export async function GET() {
 					product
 				);
 
-				const emailNotifType = getEmailNotifType(scrapedProduct, product);
+				const emailNotifType = getEmailNotifType(scrapedProduct, currentProduct);
 
 				if (emailNotifType && updatedProduct.users.length > 0) {
 					const productInfo = {
 						title: updatedProduct.title,
 						url: updatedProduct.url,
 					};
-
 					const emailContent = await generateEmailBody(productInfo, emailNotifType);
 
 					const userEmails = updatedProduct.users.map((user: any) => user.email);
 
 					await sendEmail(emailContent, userEmails);
-
-					return updatedProduct;
 				}
+
+				return updatedProduct;
 			})
 		);
 
 		return NextResponse.json({
-			message: 'OK',
+			message: 'Ok',
 			data: updatedProducts,
 		});
-	} catch (e) {
-		throw new Error(`Error in cron job ${e}`);
+	} catch (error: any) {
+		throw new Error(`Failed to get all products: ${error.message}`);
 	}
 }
