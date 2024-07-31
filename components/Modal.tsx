@@ -1,8 +1,10 @@
 'use client';
 
+import { addUserEmailToProduct } from '@/utils/actions';
 import * as Dialog from '@radix-ui/react-dialog';
 import Image from 'next/image';
 import { FormEvent, useState } from 'react';
+import toast from 'react-hot-toast';
 
 interface Props {
 	productId: string;
@@ -17,11 +19,15 @@ const Modal = ({ productId }: Props) => {
 		e.preventDefault();
 		setIsSubmitting(true);
 
-		// await addUserEmailToProduct(productId, email);
-
-		setIsSubmitting(false);
-		setEmail('');
-		closeModal();
+		try {
+			await addUserEmailToProduct(productId, email);
+		} catch (e) {
+			toast.error('Failed to track product');
+		} finally {
+			setIsSubmitting(false);
+			setEmail('');
+			closeModal();
+		}
 	};
 
 	const openModal = () => setIsOpen(true);
