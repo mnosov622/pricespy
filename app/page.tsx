@@ -5,10 +5,8 @@ import { Product } from '@/types';
 import { getAllProducts } from '@/utils/actions';
 import Image from 'next/image';
 
-const dynamic = 'force-dynamic';
-const revalidate = 0;
-
 export const fetchCache = 'force-no-store';
+export const revalidate = 0;
 
 const HomePage = async () => {
 	const products = await getAllProducts();
