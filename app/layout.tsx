@@ -1,15 +1,12 @@
 import Navbar from '@/components/Navbar';
+import { Analytics } from '@vercel/analytics/react';
 import type { Metadata } from 'next';
-import { Inter, Space_Grotesk } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'react-hot-toast';
 import './globals.css';
 
 const inter = Inter({ subsets: ['latin'] });
-const spaceGrotesk = Space_Grotesk({
-	subsets: ['latin'],
-	weight: ['300', '400', '500', '600', '700'],
-});
 
 export const metadata: Metadata = {
 	title: 'Price Spy',
@@ -29,6 +26,7 @@ export default function RootLayout({
 					{children}
 					<Toaster />
 					<NextTopLoader color="#E43030" />
+					<Analytics />
 				</main>
 			</body>
 		</html>
