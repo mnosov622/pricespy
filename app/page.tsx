@@ -2,14 +2,14 @@ import HeroCarousel from '@/components/HeroCarousel';
 import ProductCard from '@/components/ProductCard';
 import Searchbar from '@/components/Searchbar';
 import { Product } from '@/types';
-import { getAllProducts } from '@/utils/actions';
+import { getLastTwelveProducts } from '@/utils/actions';
 import Image from 'next/image';
 
 export const fetchCache = 'force-no-store';
 export const revalidate = 0;
 
 const HomePage = async () => {
-	const products = await getAllProducts();
+	const products = await getLastTwelveProducts();
 
 	return (
 		<>

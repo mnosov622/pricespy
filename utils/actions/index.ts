@@ -92,6 +92,22 @@ export async function getAllProducts() {
 	}
 }
 
+export async function getLastTwelveProducts() {
+	try {
+		connectToDb();
+
+		const products = await Product.find().sort({ createdAt: -1 }).limit(12);
+
+		if (!products || products.length === 0) {
+			throw new Error('No products found');
+		}
+
+		return products;
+	} catch (e: any) {
+		throw new Error(`Failed to get last five products: ${e.message}`);
+	}
+}
+
 export async function getSimilarProducts(productId: string) {
 	try {
 		connectToDb();
