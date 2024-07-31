@@ -62,6 +62,7 @@ export async function getProductById(productId: string) {
 		if (!product) {
 			throw new Error('Product not found');
 		}
+		return product;
 	} catch (e: any) {
 		throw new Error(`Failed to get product details ${e.message}`);
 	}
@@ -82,3 +83,43 @@ export async function getAllProducts() {
 		throw new Error(`Failed to get all products ${e.message}`);
 	}
 }
+
+export async function getSimilarProducts(productId: string) {
+	try {
+		connectToDb();
+
+		const currentProduct = await Product.findById(productId);
+
+		if (!currentProduct) return null;
+
+		const similarProducts = await Product.find({
+			_id: { $ne: productId },
+		}).limit(3);
+
+		return similarProducts;
+	} catch (error) {
+		console.log(error);
+	}
+}
+
+// export async function addUserEmailToProduct(productId: string, userEmail: string) {
+// 	try {
+// 		const product = await Product.findById(productId);
+
+// 		if (!product) return;
+
+// 		const userExists = product.users.some((user: User) => user.email === userEmail);
+
+// 		if (!userExists) {
+// 			product.users.push({ email: userEmail });
+
+// 			await product.save();
+
+// 			const emailContent = await generateEmailBody(product, 'WELCOME');
+
+// 			await sendEmail(emailContent, [userEmail]);
+// 		}
+// 	} catch (error) {
+// 		console.log(error);
+// 	}
+// }
