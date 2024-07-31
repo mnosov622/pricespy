@@ -1,14 +1,14 @@
 'use server';
 
 import { User } from '@/types';
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, unstable_noStore } from 'next/cache';
 import { getAveragePrice, getHighestPrice, getLowestPrice } from '..';
 import Product from '../models/product.model';
 import { connectToDb } from '../mongoose';
 import { generateEmailBody, sendEmail } from '../nodemailer';
 import { scrapeAmazonProduct } from '../scraper';
 
-export const dynamic = 'force-dynamic';
+unstable_noStore();
 
 export async function scrapeAndStoreProduct(productUrl: string) {
 	if (!productUrl) {
@@ -52,6 +52,10 @@ export async function scrapeAndStoreProduct(productUrl: string) {
 		);
 
 		revalidatePath(`/products/${newProduct._id}`);
+
+		const productId = newProduct._id.toString();
+
+		return productId;
 	} catch (e: any) {
 		throw new Error(`Failed to scrape product details ${e.message}`);
 	}
