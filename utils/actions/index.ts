@@ -52,3 +52,33 @@ export async function scrapeAndStoreProduct(productUrl: string) {
 		throw new Error(`Failed to scrape product details ${e.message}`);
 	}
 }
+
+export async function getProductById(productId: string) {
+	try {
+		connectToDb();
+
+		const product = await Product.findOne({ _id: productId });
+
+		if (!product) {
+			throw new Error('Product not found');
+		}
+	} catch (e: any) {
+		throw new Error(`Failed to get product details ${e.message}`);
+	}
+}
+
+export async function getAllProducts() {
+	try {
+		connectToDb();
+
+		const products = await Product.find();
+
+		if (!products) {
+			throw new Error('No products found');
+		}
+
+		return products;
+	} catch (e: any) {
+		throw new Error(`Failed to get all products ${e.message}`);
+	}
+}
