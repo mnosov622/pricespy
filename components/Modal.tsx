@@ -32,7 +32,7 @@ const Modal = ({ productId }: Props) => {
 		<>
 			<button
 				type="button"
-				className="btn"
+				className="btn transition-all"
 				onClick={openModal}
 			>
 				Track
