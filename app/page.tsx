@@ -8,6 +8,8 @@ import Image from 'next/image';
 const dynamic = 'force-dynamic';
 const revalidate = 0;
 
+export const fetchCache = 'force-no-store';
+
 const HomePage = async () => {
 	const products = await getAllProducts();
 

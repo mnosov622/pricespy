@@ -2,6 +2,7 @@
 
 import { scrapeAndStoreProduct } from '@/utils/actions';
 import { FormEvent, useState } from 'react';
+import toast from 'react-hot-toast';
 
 const isValidAmazonProductURL = (url: string) => {
 	try {
@@ -37,10 +38,13 @@ const Searchbar = () => {
 			setIsLoading(true);
 
 			const productId = await scrapeAndStoreProduct(searchPrompt);
+			if (!productId) {
+				throw new Error('Failed to scrape product details');
+			}
 
 			window.location.href = `/products/${productId}`;
 		} catch (error) {
-			console.log(error);
+			toast.error('Failed to scrape product details');
 		} finally {
 			setIsLoading(false);
 		}
