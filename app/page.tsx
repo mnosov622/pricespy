@@ -5,6 +5,8 @@ import { Product } from '@/types';
 import { getAllProducts } from '@/utils/actions';
 import Image from 'next/image';
 
+const dynamic = 'force-dynamic';
+
 const HomePage = async () => {
 	const products = await getAllProducts();
 
