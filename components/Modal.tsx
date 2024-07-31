@@ -21,6 +21,8 @@ const Modal = ({ productId }: Props) => {
 
 		try {
 			await addUserEmailToProduct(productId, email);
+
+			toast.success('Product tracking started successfully', { duration: 4000 });
 		} catch (e) {
 			toast.error('Failed to track product');
 		} finally {

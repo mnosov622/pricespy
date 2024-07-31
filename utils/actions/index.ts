@@ -1,5 +1,6 @@
 'use server';
 
+import { User } from '@/types';
 import { revalidatePath } from 'next/cache';
 import { getAveragePrice, getHighestPrice, getLowestPrice } from '..';
 import Product from '../models/product.model';
@@ -118,7 +119,9 @@ export async function addUserEmailToProduct(productId: string, userEmail: string
 
 			const emailContent = await generateEmailBody(product, 'WELCOME');
 
-			await sendEmail(emailContent, [userEmail]);
+			const result: any = await sendEmail(emailContent, [userEmail]);
+
+			console.log(result);
 		}
 	} catch (error) {
 		console.log(error);
