@@ -1,6 +1,7 @@
 import Navbar from '@/components/Navbar';
 import type { Metadata } from 'next';
 import { Inter, Space_Grotesk } from 'next/font/google';
+import NextTopLoader from 'nextjs-toploader';
 import { Toaster } from 'react-hot-toast';
 import './globals.css';
 
@@ -27,6 +28,7 @@ export default function RootLayout({
 					<Navbar />
 					{children}
 					<Toaster />
+					<NextTopLoader color="#E43030" />
 				</main>
 			</body>
 		</html>
